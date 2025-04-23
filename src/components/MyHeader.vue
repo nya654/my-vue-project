@@ -1,0 +1,77 @@
+<template>
+  <div id="globalHeader">
+    <a-menu v-model:selectedKeys="current" mode="horizontal" :items="items" />
+  </div>
+
+</template>
+<script lang="ts" setup>
+import { h, ref } from 'vue';
+import {MailOutlined, AppstoreOutlined, SettingOutlined} from '@ant-design/icons-vue';
+import githubIcon from '../assets/github-mark.png'
+import {MenuProps} from 'ant-design-vue';
+
+const current = ref<string>();
+const items = ref<MenuProps['items']>([
+  {
+    key: 'mail',
+    icon: () => h(MailOutlined),
+    label: 'Navigation One',
+    title: 'Navigation One',
+  },
+  {
+    key: 'app',
+    icon: () => h(AppstoreOutlined),
+    label: 'Navigation Two',
+    title: 'Navigation Two',
+  },
+  {
+    key: 'sub1',
+    icon: () => h(SettingOutlined),
+    label: 'Navigation Three - Submenu',
+    title: 'Navigation Three - Submenu',
+    children: [
+      {
+        type: 'group',
+        label: 'Item 1',
+        children: [
+          {
+            label: 'Option 1',
+            key: 'setting:1',
+          },
+          {
+            label: 'Option 2',
+            key: 'setting:2',
+          },
+        ],
+      },
+      {
+        type: 'group',
+        label: 'Item 2',
+        children: [
+          {
+            label: 'Option 3',
+            key: 'setting:3',
+          },
+          {
+            label: 'Option 4',
+            key: 'setting:4',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'alipay',
+    icon: () => h('img', {
+        src: githubIcon, // 使用导入的图片变量
+      style: {
+        width: '16px',
+        height: '16px',
+      },
+      alt: 'GitHub 图标'
+    }),
+    label: h('a', {href: 'https://github.com/nya654/my-vue-project', target: '_blank'}, 'GitHub-repository'),
+    title: 'github',
+  },
+]);
+</script>

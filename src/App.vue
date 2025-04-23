@@ -1,47 +1,41 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <a-layout id="BasicLayout">
+    <a-layout-header class="header">
+      <MyHeader />
+    </a-layout-header>
+    <a-layout-content>
+      <MyLogin />
+    </a-layout-content>
+    <a-layout-footer class="footer">
+      <footer>Ant Design ©2023 Created by Ant UED</footer>
+    </a-layout-footer>
+  </a-layout>
 </template>
-
+<script>
+import MyHeader from './components/MyHeader.vue';
+import MyLogin from '@/components/MyLogin.vue';
+export default {
+  name: 'BasicLayout',
+  components: {
+    MyLogin,
+    MyHeader,
+  },
+  setup() {
+    return {};
+  },
+};
+</script>
 <style scoped>
-header {
-  line-height: 1.5;
+#BasicLayout .header {
+  background-color: white;
+  color: unset;
 }
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+#BasicLayout .footer {
+  background: rgba(0, 0, 0, 0.2);
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 </style>
