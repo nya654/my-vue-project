@@ -18,7 +18,7 @@ import RegisterForm from '@/components/RegisterForm.vue';
             <h3 style="margin-bottom: 30px">请注册 or 登陆~</h3>
           </div>
 
-          <div style="margin-right: 20px">
+          <div style="margin-left: 30px">
             <RegisterForm />
           </div>
         </a-layout-sider>

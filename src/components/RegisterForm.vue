@@ -5,7 +5,7 @@
     :model="formState"
     :rules="rules"
     v-bind="layout"
-    @finish="handleFinish"
+    @finish="register"
     @validate="handleValidate"
     @finishFailed="handleFinishFailed"
   >
@@ -16,14 +16,14 @@
     >
       <a-input v-model:value="formState.username" />
     </a-form-item>
-    <a-form-item has-feedback label="Password" name="pass">
+    <a-form-item has-feedback label="密码" name="pass">
       <a-input v-model:value="formState.pass" type="password" autocomplete="off" />
     </a-form-item>
-    <a-form-item has-feedback label="Confirm" name="checkPass">
+    <a-form-item has-feedback label="确认密码" name="checkPass">
       <a-input v-model:value="formState.checkPass" type="password" autocomplete="off" />
     </a-form-item>
-    <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-      <a-button type="primary" html-type="submit">Submit</a-button>
+    <a-form-item :wrapper-col="{ span: 14, offset: 6 }">
+      <a-button type="primary" html-type="submit">注册</a-button>
     </a-form-item>
   </a-form>
 </template>
@@ -44,7 +44,7 @@ const formState = reactive<FormState>({
 });
 const validatePass = async (_rule: Rule, value: string) => {
   if (value === '') {
-    return Promise.reject('Please input the password');
+    return Promise.reject('请输入密码哦');
   } else {
     if (formState.checkPass !== '') {
       formRef.value.validateFields('checkPass');
@@ -54,9 +54,9 @@ const validatePass = async (_rule: Rule, value: string) => {
 };
 const validatePass2 = async (_rule: Rule, value: string) => {
   if (value === '') {
-    return Promise.reject('Please input the password again');
+    return Promise.reject('请你确认你的密码');
   } else if (value !== formState.pass) {
-    return Promise.reject("Two inputs don't match!");
+    return Promise.reject("你再次确认的密码和第一次输入的密码不一致");
   } else {
     return Promise.resolve();
   }
@@ -67,8 +67,8 @@ const rules: Record<string, Rule[]> = {
   checkPass: [{ validator: validatePass2, trigger: 'change' }],
 };
 const layout = {
-  labelCol: { span: 4 },
-  wrapperCol: { span: 14 },
+  labelCol: { span: 6 },
+  wrapperCol: { span: 17 },
 };
 const handleFinish = (values: FormState) => {
   console.log(values, formState);
@@ -76,11 +76,32 @@ const handleFinish = (values: FormState) => {
 const handleFinishFailed = errors => {
   console.log(errors);
 };
-const resetForm = () => {
-  formRef.value.resetFields();
-};
 const handleValidate = (...args) => {
   console.log(args);
 };
+import axios from 'axios';
+async function register() {
+  try{
+    const response = await axios.post('http://localhost:8000/api/register',{
+      username: formState.username,
+      password: formState.pass
+    }
+    )
+    alert(response.data.message)
+  }catch (error){
+    if(error.response){
+
+      const {status,data} = error.response
+
+      if (status === 401){
+        alert(data.detail.message)
+      }else{
+        alert(`请求失败 ${status}`)
+      }
+    }else {
+      alert("网络问题")
+    }
+  }
+}
 </script>
 
