@@ -4,12 +4,13 @@
       <MyHeader />
     </a-layout-header>
     <a-layout-content>
-      <MyLogin />
+      <router-view></router-view>
     </a-layout-content>
     <a-layout-footer class="footer">
-      <footer>Ant Design ©2023 Created by Ant UED</footer>
+      <footer>关于</footer>
     </a-layout-footer>
   </a-layout>
+
 </template>
 <script>
 import MyHeader from './components/MyHeader.vue';

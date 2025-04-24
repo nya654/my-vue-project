@@ -1,6 +1,16 @@
 <template>
   <div id="globalHeader">
-    <a-menu v-model:selectedKeys="current" mode="horizontal" :items="items" />
+    <a-row>
+      <a-col :span="21">
+        <a-menu v-model:selectedKeys="current" mode="horizontal" :items="items" />
+      </a-col>
+      <a-col :span="3">
+        <a-button style="margin-right: 20px" >登陆</a-button>
+        <a-button>注册</a-button>
+      </a-col>
+
+    </a-row>
+
   </div>
 
 </template>
@@ -9,8 +19,9 @@ import { h, ref } from 'vue';
 import {MailOutlined, AppstoreOutlined, SettingOutlined} from '@ant-design/icons-vue';
 import githubIcon from '../assets/github-mark.png'
 import {MenuProps} from 'ant-design-vue';
+import axios from 'axios';
 
-const current = ref<string>();
+const current = ref<string[]>();
 const items = ref<MenuProps['items']>([
   {
     key: 'mail',

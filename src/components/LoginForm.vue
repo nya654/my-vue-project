@@ -5,7 +5,7 @@
     :label-col="{ span: 8 }"
     :wrapper-col="{ span: 16 }"
     autocomplete="off"
-    @finish="onFinish"
+    @finish="login"
     @finishFailed="onFinishFailed"
   >
     <a-form-item
@@ -29,7 +29,7 @@
     </a-form-item>
 
     <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-      <a-button type="primary" html-type="submit">Submit</a-button>
+      <a-button type="primary" html-type="submit">登陆</a-button>
     </a-form-item>
   </a-form>
 </template>
@@ -54,5 +54,33 @@ const onFinish = (values: any) => {
 const onFinishFailed = (errorInfo: any) => {
   console.log('Failed:', errorInfo);
 };
-</script>
+import axios from 'axios';
 
+async function login() {
+  try {
+    const response = await axios.post('http://localhost:8000/api/login', {
+      username: formState.username,
+      password: formState.password,
+      remember: formState.remember,
+      method: 'post'
+    })
+    alert(response.data.message)
+  }catch(error){
+    if (error.response) {
+      // 后端返回了 HTTP 错误状态码 (4xx/5xx)
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        // 处理认证错误
+        alert(data.detail.message || data.detail);
+      } else {
+        // 其他错误
+        alert(`请求失败: ${status}`);
+      }
+    } else {
+      // 网络错误或请求未发送
+      alert('网络连接失败');
+    }
+  }
+}
+</script>
