@@ -10,6 +10,13 @@
     @finishFailed="handleFinishFailed"
   >
     <a-form-item
+      label="邮箱"
+      name="email"
+      :rules="[{ required: true, message: '请告诉我你的邮箱地址' }]"
+    >
+      <a-input v-model:value="formState.email" />
+    </a-form-item>
+    <a-form-item
       label="用户名"
       name="username"
       :rules="[{ required: true, message: '请告诉我你的名字~' }]"
@@ -41,6 +48,7 @@ const formState = reactive<FormState>({
   username: '',
   pass: '',
   checkPass: '',
+  email: ''
 });
 const validatePass = async (_rule: Rule, value: string) => {
   if (value === '') {
@@ -84,7 +92,8 @@ async function register() {
   try{
     const response = await axios.post('http://localhost:8000/api/register',{
       username: formState.username,
-      password: formState.pass
+      password: formState.pass,
+      email: formState.email
     }
     )
     alert(response.data.message)

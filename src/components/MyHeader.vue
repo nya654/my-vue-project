@@ -5,8 +5,13 @@
         <a-menu v-model:selectedKeys="current" mode="horizontal" :items="items" />
       </a-col>
       <a-col :span="3">
-        <a-button style="margin-right: 20px" >登陆</a-button>
-        <a-button>注册</a-button>
+        <router-link to="/login">
+          <a-button style="margin-right: 20px" >登陆</a-button>
+        </router-link>
+        <router-link to="/register">
+          <a-button>注册</a-button>
+        </router-link>
+
       </a-col>
 
     </a-row>
@@ -26,8 +31,8 @@ const items = ref<MenuProps['items']>([
   {
     key: 'mail',
     icon: () => h(MailOutlined),
-    label: 'Navigation One',
-    title: 'Navigation One',
+    label: 'TodoList',
+    title: 'TodoList',
   },
   {
     key: 'app',

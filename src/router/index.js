@@ -12,6 +12,11 @@ const routes = [
         path:'/register',
         name:'MyRegister',
         component:()=>import('@/components/MyRegister.vue')
+    },
+    {
+        path:'/todo',
+        name:'Mytodo',
+        component: () => import('@/components/TodoList.vue')
     }
 ]
 
