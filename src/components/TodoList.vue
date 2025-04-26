@@ -11,7 +11,7 @@
       </div>
 
       <div class="todo-list">
-        <todo-card dothings="吃饭"/>
+        <todo-card v-for="thing in things" :dothings="thing" style="margin-bottom: 10px"/>
         <!-- 后续待办事项 -->
       </div>
     </a-card>
@@ -54,7 +54,36 @@
   border-bottom: 2px solid #1890ff;
 }
 </style>
-<script setup>
+<script>
 import TodoAdd from "./TodoAdd.vue";
 import TodoCard from "./TodoCard.vue";
+import axios from 'axios';
+async function getThings(){
+  try {
+    const response = await axios.get('http://localhost:8000/api/getthings')
+    return response.data.data.contents
+  }catch (error){
+    console.log(error.response.data)
+    return []
+  }
+}
+export default {
+  data(){
+    return{
+      things: []
+    }
+  },
+  async created(){
+    try{
+      this.things = await getThings()
+    }catch (error){
+      console.log("数据加载失败")
+    }
+
+  },
+  components: {
+    TodoAdd,
+    TodoCard
+  }
+}
 </script>
