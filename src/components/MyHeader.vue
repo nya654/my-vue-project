@@ -25,14 +25,20 @@ import {MailOutlined, AppstoreOutlined, SettingOutlined} from '@ant-design/icons
 import githubIcon from '../assets/github-mark.png'
 import {MenuProps} from 'ant-design-vue';
 import axios from 'axios';
+import { RouterLink } from 'vue-router'
 
 const current = ref<string[]>();
 const items = ref<MenuProps['items']>([
   {
     key: 'mail',
     icon: () => h(MailOutlined),
-    label: 'TodoList',
-    title: 'TodoList',
+    label: h(
+      RouterLink,
+      { to: '/todo' },
+      { default: () => 'TodoList' }
+    ),
+    title: 'TodoList'
+
   },
   {
     key: 'app',
