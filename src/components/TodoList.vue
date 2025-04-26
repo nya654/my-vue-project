@@ -11,7 +11,7 @@
       </div>
 
       <div class="todo-list">
-        <todo-card v-for="thing in things" :dothings="thing" style="margin-bottom: 10px"/>
+        <todo-card v-for="thing in things" :dothings="thing[0]" :checked="thing[1]"style="margin-bottom: 10px"/>
         <!-- 后续待办事项 -->
       </div>
     </a-card>
@@ -61,7 +61,8 @@ import axios from 'axios';
 async function getThings(){
   try {
     const response = await axios.get('http://localhost:8000/api/getthings')
-    return response.data.data.contents
+    console.log(response.data.data.items)
+    return response.data.data.items
   }catch (error){
     console.log(error.response.data)
     return []
