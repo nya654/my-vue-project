@@ -51,6 +51,9 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 import type { UnwrapRef } from 'vue';
 import type { FormProps } from 'ant-design-vue';
 import axios from 'axios';
+import { defineEmits } from 'vue'
+
+const emit = defineEmits(['update'])
 
 interface FormState {
   content: string;
@@ -68,12 +71,14 @@ const handleFinishFailed: FormProps['onFinishFailed'] = errors => {
 async function addTodo() {
   try {
     const response = await axios.post('http://localhost:8000/api/addthing', {
-      content: formState.content
+      id: 0,
+      content: formState.content,
+      is_finish: false
     },{
       withCredentials: true // 发送 Cookie
     });
-    // );
-    alert(response.data.message);
+    //数据库里更新了 前端也要更新
+    emit('update', response.data.data)
   }catch (error) {
     console.error('Error:', error);
   }

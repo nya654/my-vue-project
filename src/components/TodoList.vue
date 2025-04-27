@@ -1,17 +1,17 @@
 <template>
   <div class="main-container">
     <a-card
-      title="我的一天"
+      title="TodoList"
       :bordered="false"
       class="content-card"
     >
       <!-- 添加表单容器 -->
       <div class="form-container">
-        <TodoAdd />
+        <TodoAdd @update="handleUpdate"/>
       </div>
 
       <div class="todo-list">
-        <todo-card v-for="thing in things" :dothings="thing[0]" :checked="thing[1]"style="margin-bottom: 10px"/>
+        <todo-card v-for="thing in things" :dothings="thing[0]" :checked="thing[1]" style="margin-bottom: 10px" :cardId="thing[2]"/>
         <!-- 后续待办事项 -->
       </div>
     </a-card>
@@ -85,6 +85,12 @@ export default {
   components: {
     TodoAdd,
     TodoCard
+  },
+  methods:{
+    handleUpdate(payload){
+      console.log(payload)
+      this.things.push([payload.content,false,payload.id])
+    }
   }
 }
 </script>
