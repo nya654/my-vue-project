@@ -34,33 +34,56 @@
       </a-input>
     </a-form-item>
     <a-form-item>
-      <a-button type="primary" shape="round" size="large" html-type="submit" :disabled="formState.content === ''">
+<!--  当表单为空的时候 无论何时 都不需要click方法-->
+      <!--当日期相同时 无论何时 都不需要click方法-->
+      <a-popover v-model:open="visible" title="只能在今天新建待办事项哦~" :trigger="(props.ParentDays === dayjs().format('YYYY-MM-DD') || formState.content==='')  ? [] : ['click']">
+          <template #content>
+            <a @click="hide">close</a>
+          </template>
+          <a-button type="primary" shape="round" size="large" html-type="submit" :disabled="formState.content === ''">
         <template #icon>
               <PlusOutlined />
         </template>
             新建
+
       </a-button>
+        </a-popover>
+
     </a-form-item>
 
   </a-form>
 </template>
 <script lang="ts" setup>
 import { PlusOutlined } from '@ant-design/icons-vue';
-import { reactive } from 'vue';
+import { reactive,ref } from 'vue';
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 import type { UnwrapRef } from 'vue';
 import type { FormProps } from 'ant-design-vue';
 import axios from 'axios';
 import { defineEmits } from 'vue'
+import dayjs from 'dayjs'
+
+const days = ref(dayjs().format('YYYY-MM-DD'))
+
+const props = defineProps({
+  ParentDays: {
+    type: String,
+    required: true
+  }
+
+})
 
 const emit = defineEmits(['update'])
+
+const visible = ref<boolean>(false);
+
+
 
 interface FormState {
   content: string;
 }
 const formState: UnwrapRef<FormState> = reactive({
-  user: '',
-  password: '',
+  content: ''
 });
 const handleFinish: FormProps['onFinish'] = values => {
   console.log(values, formState);
@@ -68,7 +91,15 @@ const handleFinish: FormProps['onFinish'] = values => {
 const handleFinishFailed: FormProps['onFinishFailed'] = errors => {
   console.log(errors);
 };
+const hide = () => {
+  visible.value = false;
+};
+
 async function addTodo() {
+  if(props.ParentDays !== dayjs().format('YYYY-MM-DD')){
+    visible.value = true
+    return
+  }
   try {
     const response = await axios.post('http://localhost:8000/api/addthing', {
       id: 0,
@@ -78,6 +109,7 @@ async function addTodo() {
       withCredentials: true // 发送 Cookie
     });
     //数据库里更新了 前端也要更新
+    formState.content = ''
     emit('update', response.data.data)
   }catch (error) {
     console.error('Error:', error);

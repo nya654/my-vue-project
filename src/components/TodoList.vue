@@ -5,9 +5,12 @@
       :bordered="false"
       class="content-card"
     >
+      <a-form-item name="date-picker" label="日期" class="flex-container" >
+      <a-date-picker v-model:value="days" value-format="YYYY-MM-DD" placeholder="选择日期" />
+    </a-form-item>
       <!-- 添加表单容器 -->
       <div class="form-container">
-        <TodoAdd @update="handleUpdate"/>
+        <TodoAdd @update="handleUpdate" :ParentDays="this.days"/>
       </div>
 
       <div class="todo-list">
@@ -46,7 +49,12 @@
 .todo-list {
   margin-top: 40px;
 }
-
+.flex-container {
+  position: relative; /* 或 absolute/fixed 根据需求 */
+  display: flex;
+  justify-content: flex-end; /* 水平靠右 */
+  align-items: flex-start;   /* 垂直靠上 */
+}
 /* 深度选择器强制修改卡片头样式 */
 :deep(.ant-card-head) {
   font-size: 24px;
@@ -58,29 +66,20 @@
 import TodoAdd from "./TodoAdd.vue";
 import TodoCard from "./TodoCard.vue";
 import axios from 'axios';
-async function getThings(){
-  try {
-    const response = await axios.get('http://localhost:8000/api/getthings')
-    console.log(response.data.data.items)
-    return response.data.data.items
-  }catch (error){
-    console.log(error.response.data)
-    return []
-  }
-}
+import dayjs from 'dayjs';
+
+
 export default {
   data(){
     return{
-      things: []
+      things: [],
+      days: dayjs().format('YYYY-MM-DD'),
     }
   },
   async created(){
-    try{
-      this.things = await getThings()
-    }catch (error){
-      console.log("数据加载失败")
-    }
-
+      console.log(this.days)
+      console.log(typeof(this.days))
+      await this.getThings()
   },
   components: {
     TodoAdd,
@@ -88,9 +87,33 @@ export default {
   },
   methods:{
     handleUpdate(payload){
+
       console.log(payload)
       this.things.push([payload.content,false,payload.id])
+    },
+    async getThings(){
+        try {
+
+          const response = await axios.get(`http://localhost:8000/api/getthings/${this.days}`)
+          const items = response?.data?.data?.items || [];
+          console.log(items)
+          this.things = items
+        }catch (error){
+          console.error('请求失败:', {
+            status: error.response?.status,
+            data: error.response?.data,
+            config: error.config
+          });
+          console.log(error.response.data)
+          return []
+        }
+      }
+  },
+  watch:{
+    days(oldValue,newValue){
+      this.getThings()
     }
   }
+
 }
 </script>
