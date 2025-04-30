@@ -4,14 +4,17 @@
       <a-col :span="21">
         <a-menu v-model:selectedKeys="current" mode="horizontal" :items="items" />
       </a-col>
-      <a-col :span="3">
+      <a-col v-if="user === null" :span="3">
         <router-link to="/login">
           <a-button style="margin-right: 20px" >登陆</a-button>
         </router-link>
         <router-link to="/register">
           <a-button>注册</a-button>
         </router-link>
+      </a-col>
+      <a-col v-else :span="3">
 
+          <a-button @click="logout">登出</a-button>
       </a-col>
 
     </a-row>
@@ -26,6 +29,15 @@ import githubIcon from '../assets/github-mark.png'
 import {MenuProps} from 'ant-design-vue';
 import axios from 'axios';
 import { RouterLink } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { storeToRefs } from 'pinia';
+
+const store = useAuthStore()
+
+const {user} = storeToRefs(store)
+
+const {logout} = store
+
 
 const current = ref<string[]>();
 const items = ref<MenuProps['items']>([

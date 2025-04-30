@@ -61,8 +61,6 @@ async function login() {
     const response = await axios.post('http://localhost:8000/api/login', {
       username: formState.username,
       password: formState.password,
-      remember: formState.remember,
-      method: 'post'
     })
     alert(response.data.message)
   }catch(error){

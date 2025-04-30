@@ -77,6 +77,9 @@ export default {
     }
   },
   async created(){
+    //判断在不在登陆状态
+    const cookie = document.cookie
+    console.log(cookie)
       console.log(this.days)
       console.log(typeof(this.days))
       await this.getThings()
