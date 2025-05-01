@@ -1,7 +1,7 @@
 <template>
   <a-layout id="BasicLayout">
     <a-layout-header class="header">
-      <MyHeader />
+      <MyHeader :key="refresh" @refresh=""/>
     </a-layout-header>
     <a-layout-content>
       <router-view></router-view>
@@ -16,6 +16,11 @@
 import MyHeader from './components/MyHeader.vue';
 import MyLogin from '@/components/MyLogin.vue';
 export default {
+  data(){
+    return{
+      refresh: null
+    }
+  },
   name: 'BasicLayout',
   components: {
     MyLogin,

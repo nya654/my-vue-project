@@ -13,7 +13,7 @@
         </router-link>
       </a-col>
       <a-col v-else :span="3">
-
+          <span style="margin-right: 30px">欢迎~ {{user.name}}</span>
           <a-button @click="logout">登出</a-button>
       </a-col>
 
@@ -37,6 +37,8 @@ const store = useAuthStore()
 const {user} = storeToRefs(store)
 
 const {logout} = store
+
+const emit = defineEmits(['refresh'])
 
 
 const current = ref<string[]>();

@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import axios from 'axios';
-import {ref} from 'vue';
+import { ref, withKeys } from 'vue';
 
 export const useAuthStore = defineStore(
   'auth',
@@ -14,13 +14,19 @@ export const useAuthStore = defineStore(
     const initialize = async () => {
       try{
         //需要从后端获取他的sessionID是否有效
-        const response = await axios.get("https://localhost:8000/api/init")
-        user.value = response.data
+        const response = await axios.post("http://localhost:8000/api/init",{},{
+          withCredentials: true
+        })
+
+        user.value = response.data.data
+        console.log(user.value)
 
       }catch (error){
         //获取失败可能是会话不存在 可以直接强制清除cookie
+        console.log("初始化失败")
+        console.log(error)
         user.value = null
-        document.cookie = "session_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+        document.cookie = "session_id=; path=/; max-age=0"
       }
     }
 
@@ -49,12 +55,17 @@ export const useAuthStore = defineStore(
           }
         }
       }
-      const logout = () => {
-        try{
-          const response = axios.post("http://localhost:8000/api/logout")
-          document.cookie = "session_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+      const logout = async () => {
+        try {
+          const response = await axios.post("http://localhost:8000/api/logout")
+          document.cookie = "session_id=; path=/; max-age=0"
+          //怎么跳转呢？
+          this.$router.replace('/login')
+          //这样就不需要做什么呃 前端显示了 你点出来的一瞬间就给你跳转到登陆界面了
+          const emit = defineEmits(['refresh'])
+          emit('refresh',Date.now())
           return true
-        }catch (error){
+        } catch (error) {
           console.error('Logout error:', error)
           return false
         }
