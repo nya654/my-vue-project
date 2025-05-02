@@ -14,7 +14,7 @@
       </a-col>
       <a-col v-else :span="3">
           <span style="margin-right: 30px">欢迎~ {{user.name}}</span>
-          <a-button @click="logout">登出</a-button>
+          <a-button @click="logout(); refresh()">登出</a-button>
       </a-col>
 
     </a-row>
@@ -40,6 +40,10 @@ const {logout} = store
 
 const emit = defineEmits(['refresh'])
 
+const refresh = () => {
+  // 首先定义的emit传
+  emit('refresh')
+}
 
 const current = ref<string[]>();
 const items = ref<MenuProps['items']>([

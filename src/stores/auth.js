@@ -61,9 +61,6 @@ export const useAuthStore = defineStore(
           document.cookie = "session_id=; path=/; max-age=0"
           //怎么跳转呢？
           this.$router.replace('/login')
-          //这样就不需要做什么呃 前端显示了 你点出来的一瞬间就给你跳转到登陆界面了
-          const emit = defineEmits(['refresh'])
-          emit('refresh',Date.now())
           return true
         } catch (error) {
           console.error('Logout error:', error)

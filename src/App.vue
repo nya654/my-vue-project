@@ -1,7 +1,9 @@
 <template>
   <a-layout id="BasicLayout">
     <a-layout-header class="header">
-      <MyHeader :key="refresh" @refresh=""/>
+      <!--我现在需要做一个刷新系统
+           通过MyHeader的子组件传现在的App父组件来进行刷新-->
+      <MyHeader v-if="true" @refresh="handleRefresh"/>
     </a-layout-header>
     <a-layout-content>
       <router-view></router-view>
@@ -15,10 +17,11 @@
 <script>
 import MyHeader from './components/MyHeader.vue';
 import MyLogin from '@/components/MyLogin.vue';
+import {nextTick} from 'vue'
 export default {
   data(){
     return{
-      refresh: null
+      headerKey: true
     }
   },
   name: 'BasicLayout',
@@ -26,9 +29,15 @@ export default {
     MyLogin,
     MyHeader,
   },
-  setup() {
-    return {};
-  },
+  methods: {
+    handleRefresh(){
+      this.headerKey = false;
+      console.log("刷新")
+      nextTick(() => {
+        this.headerKey = true;
+      });
+    }
+  }
 };
 </script>
 <style scoped>
