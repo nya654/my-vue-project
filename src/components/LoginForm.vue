@@ -5,7 +5,7 @@
     :label-col="{ span: 8 }"
     :wrapper-col="{ span: 16 }"
     autocomplete="off"
-    @finish="login"
+    @finish="login(formState)"
     @finishFailed="onFinishFailed"
   >
     <a-form-item
@@ -35,6 +35,13 @@
 </template>
 <script lang="ts" setup>
 import { reactive } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+const store = useAuthStore();
+
+const { login } = store;
+
+const router = useRouter();
 
 interface FormState {
   username: string;
@@ -45,7 +52,6 @@ interface FormState {
 const formState = reactive<FormState>({
   username: '',
   password: '',
-  remember: true,
 });
 const onFinish = (values: any) => {
   console.log('Success:', values);
@@ -54,31 +60,4 @@ const onFinish = (values: any) => {
 const onFinishFailed = (errorInfo: any) => {
   console.log('Failed:', errorInfo);
 };
-import axios from 'axios';
-
-async function login() {
-  try {
-    const response = await axios.post('http://localhost:8000/api/login', {
-      username: formState.username,
-      password: formState.password,
-    })
-    alert(response.data.message)
-  }catch(error){
-    if (error.response) {
-      // 后端返回了 HTTP 错误状态码 (4xx/5xx)
-      const { status, data } = error.response;
-
-      if (status === 401) {
-        // 处理认证错误
-        alert(data.detail.message || data.detail);
-      } else {
-        // 其他错误
-        alert(`请求失败: ${status}`);
-      }
-    } else {
-      // 网络错误或请求未发送
-      alert('网络连接失败');
-    }
-  }
-}
 </script>

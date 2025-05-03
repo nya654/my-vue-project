@@ -28,6 +28,8 @@
   min-height: 100vh;
   background: #ececec;
   padding: 30px;
+  z-index: 1;
+  position: relative;
 }
 
 .content-card {
@@ -49,6 +51,7 @@
 .todo-list {
   margin-top: 40px;
 }
+
 .flex-container {
   position: relative; /* 或 absolute/fixed 根据需求 */
   display: flex;
@@ -60,6 +63,20 @@
   font-size: 24px;
   font-weight: bold;
   border-bottom: 2px solid #1890ff;
+}
+:deep(.ant-card) {
+  background-color: rgba(255, 255, 255, 0.6)!important;
+}
+.main-container::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("../assets/129202495_p0.jpg") center/cover;
+  opacity: 0.5;
+  z-index: 0;
 }
 </style>
 <script>

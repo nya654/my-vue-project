@@ -36,6 +36,7 @@ export const useAuthStore = defineStore(
      const login =  async (credentials) => {
         try {
           const response = await axios.post('http://localhost:8000/api/login', credentials)
+          await initialize()
           alert(response.data.message)
         }catch(error){
           if (error.response) {
@@ -59,8 +60,7 @@ export const useAuthStore = defineStore(
         try {
           const response = await axios.post("http://localhost:8000/api/logout")
           document.cookie = "session_id=; path=/; max-age=0"
-          //怎么跳转呢？
-          this.$router.replace('/login')
+          user.value = null;
           return true
         } catch (error) {
           console.error('Logout error:', error)
